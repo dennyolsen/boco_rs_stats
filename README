@@ -1,0 +1,8 @@
+Goal: Create a utility that automatically downloads fresh Sentinel-2 data and outputs average NDVI values for input polygons, which are fed into a reporting tool.
+
+Steps:
+
+1) Check for fresh Sentinel-2 data
+2) Download NDVI imagery or perform calculation and mask raw images
+3) Calculate mean NDVI values for polygons
+4) Load polygon values into a reporting tool
