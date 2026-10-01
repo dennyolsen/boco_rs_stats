@@ -1,5 +1,6 @@
 import numpy as np
 import rasterio
+from datetime import datetime
 
 
 def calculate_ndvi():
@@ -23,6 +24,9 @@ def calculate_ndvi():
       | np.isnan(nir)
       | ((nir + red) == 0)
   )
+  # fix buggy values from atmospheric correction, set them to 0
+  nir = np.clip(nir, 0, None)
+  red = np.clip(red, 0, None)
 
   # 3. Calculate NDVI, assigning NaN to null/zero-denominator conditions
   ndvi = np.where(null_mask, np.nan, (nir - red) / (nir + red))
@@ -32,5 +36,7 @@ def calculate_ndvi():
 
   ndvi_output = np.where(np.isnan(ndvi), -9999, ndvi)
 
-  with rasterio.open("ndvi_output.tif", "w", **profile) as dst:
+  filename = "ndvi_boco_" + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".tif"
+
+  with rasterio.open(filename, "w", **profile) as dst:
     dst.write(ndvi_output.astype(rasterio.float32), 1)

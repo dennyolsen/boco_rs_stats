@@ -1,11 +1,12 @@
 import geopandas as gpd
 import rasterio
 from rasterstats import zonal_stats
+import sys
 
 
 # 1. Load your raster and polygon files
-raster_path = "ndvi_output.tif"
-vector_path = "ParksWork_-7031856640992189817.geojson"
+raster_path = sys.argv[1]  # e.g., "ndvi_boco_2023-10-05_12-30-00.tif"
+vector_path = sys.argv[2]  # e.g., "ParksWork_-7031856640992189817.geojson"
 
 raster = rasterio.open(raster_path)
 polygons = gpd.read_file(vector_path)
@@ -15,7 +16,7 @@ if polygons.crs != raster.crs:
     polygons = polygons.to_crs(raster.crs)
 
 # 3. Read raster band and affine transform
-band_array = raster.read(1) #should this be zero or one?  internet says one...
+band_array = raster.read(1)
 affine_transform = raster.transform
 
 # 4. Calculate zonal statistics (mean/average)
