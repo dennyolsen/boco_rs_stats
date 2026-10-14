@@ -37,17 +37,17 @@ def load_10m_data(lon_min, lon_max, lat_min, lat_max, number_days):
     #reduce the time dimension to get a median composite image
     median_image = sentinel2_cube.reduce_dimension(dimension="t", reducer="median")
 
-    # Scale factor conversion for Sentinel-2 L2A data (from 0-10000 to 0-1)
-    # define child process, use ProcessBuilder
-    def scale_function(x: ProcessBuilder):
-        return x * 0.0001
+    # # Scale factor conversion for Sentinel-2 L2A data (from 0-10000 to 0-1)
+    # # define child process, use ProcessBuilder
+    # def scale_function(x: ProcessBuilder):
+    #     return x * 0.0001
 
-    # Convert to reflectance (simple multiplication)
-    print("Converting to reflectance...")
-    reflectance_cube= median_image.apply(scale_function)
+    # # Convert to reflectance (simple multiplication)
+    # print("Converting to reflectance...")
+    # reflectance_cube= median_image.apply(scale_function)
 
     # Specify the save format 
-    final_result = reflectance_cube.save_result(format="GTiff")
+    final_result = sentinel2_cube.save_result(format="GTiff")
 
     # Define job title and description
     job_title = "R, NIR bands and SCL mask for Boulder County, Colorado, USA"
